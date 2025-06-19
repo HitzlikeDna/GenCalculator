@@ -10,13 +10,58 @@
     <p>Here you can calculate your income!</p>
     <form onsubmit="event.preventDefault(); GenCalc();">
         <label for="Resin">Resin Gens:</label>
-        <input type="number" id="Resin" name="resin">
+        <input type="number" id="Resin" name="Resin">
 
         <label for="Ghast">Ghast Gens:</label>
-        <input type="number" id="Ghast" name="ghast">
+        <input type="number" id="Ghast" name="Ghast">
 
         <label for="Sculk">Sculk Gens:</label>
-        <input type="number" id="sculk" name="sculk">
+        <input type="number" id="Sculk" name="Sculk">
+
+        <label for="Amethyst">Amethyst Gens:</label>
+        <input type="number" id="Amethyst" name="Amethyst">
+
+        <label for="Cr_Obsidian">Cr_Obsidian Gens:</label>
+        <input type="number" id="Cr_Obsidian" name="Cr_Obsidian">
+
+        <label for="Obsidian">Obsidian Gens:</label>
+        <input type="number" id="Obsidian" name="Obsidian">
+
+        <label for="Netherite">Netherite Gens:</label>
+        <input type="number" id="Netherite" name="Netherite">
+
+        <label for="Diamond">Diamond Gens:</label>
+        <input type="number" id="Diamond" name="Diamond">
+
+        <label for="Gold">Gold Gens:</label>
+        <input type="number" id="Gold" name="Gold">
+
+        <label for="Redstone">Redstone Gens:</label>
+        <input type="number" id="Redstone" name="Redstone">
+
+        <label for="Copper">Copper Gens:</label>
+        <input type="number" id="Copper" name="Copper">
+
+        <label for="Iron">Iron Gens:</label>
+        <input type="number" id="Iron" name="Iron">
+
+        <label for="Coal">Coal Gens:</label>
+        <input type="number" id="Coal" name="Coal">
+
+        <label for="Prismarine">Prismarine Gens:</label>
+        <input type="number" id="Prismarine" name="Prismarine">
+
+        <label for="Kelp">Kelp Gens:</label>
+        <input type="number" id="Kelp" name="Kelp">
+
+        <label for="Pumpkin">Pumpkin Gens:</label>
+        <input type="number" id="Pumpkin" name="Pumpkin">
+
+        <label for="Melon">Melon Gens:</label>
+        <input type="number" id="Melon" name="Melon">
+
+        <label for="Wheat">Wheat Gens:</label>
+        <input type="number" id="Wheat" name="Wheat">
 
         <label for="Multiplier">Multiplier:</label>
         <select id="Multiplier" name="multiplier">
@@ -49,27 +94,48 @@
         }
 
         function GenCalc() {
-        const ids = [
-            "Ghast", "Resin", "Sculk", "Amethyst", "Cr_Obsidian", "Obsidian", "Netherite",
-            "Diamond", "Gold", "Redstone", "Copper", "Iron", "Coal", "Prismarine",
-            "Kelp", "Pumpkin", "Melon", "Wheat"
-        ];
+            const ids = [
+                "Ghast", "Resin", "Sculk", "Amethyst", "Cr_Obsidian", "Obsidian", "Netherite",
+                "Diamond", "Gold", "Redstone", "Copper", "Iron", "Coal", "Prismarine",
+                "Kelp", "Pumpkin", "Melon", "Wheat"
+            ];
 
-        const values = {};
-        ids.forEach(id => {
-            values[id] = parseFloat(document.getElementById(id).value) || 0;
-        });
+            const rates = {
+                Ghast: 125,
+                Resin: 100,
+                Sculk: 75,
+                Amethyst: 70,
+                Cr_Obsidian: 95,
+                Obsidian: 80,
+                Netherite: 300,
+                Diamond: 200,
+                Gold: 150,
+                Redstone: 120,
+                Copper: 100,
+                Iron: 90,
+                Coal: 60,
+                Prismarine: 85,
+                Kelp: 50,
+                Pumpkin: 45,
+                Melon: 40,
+                Wheat: 35
+            };
 
-        const Multiplier = parseFloat(document.getElementById("Multiplier").value) || 1;
+            const values = {};
+            ids.forEach(id => {
+                values[id] = parseFloat(document.getElementById(id).value) || 0;
+            });
 
-            const ResinIncome = Resin * 4 * Multiplier * 100;
-            const GhastIncome = Ghast * 4 * Multiplier * 125;
-            const Sculk = Sculk * 4 * Multiplier * 75;
-            const IncomeSum = ResinIncome + GhastIncome;
+            const Multiplier = parseFloat(document.getElementById("Multiplier").value) || 1;
 
-            document.getElementById("Income1").innerHTML = formatNumber(IncomeSum) + "/min";
-            document.getElementById("Income2").innerHTML = formatNumber(IncomeSum * 60) + "/hour";
-            document.getElementById("Income3").innerHTML = formatNumber(IncomeSum * 60 * 24) + "/day";
+            let totalIncome = 0;
+            ids.forEach(id => {
+                totalIncome += values[id] * 4 * Multiplier * (rates[id] || 0);
+            });
+
+            document.getElementById("Income1").innerHTML = formatNumber(totalIncome) + "/min";
+            document.getElementById("Income2").innerHTML = formatNumber(totalIncome * 60) + "/hour";
+            document.getElementById("Income3").innerHTML = formatNumber(totalIncome * 60 * 24) + "/day";
         }
     </script>
 </body>
