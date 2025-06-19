@@ -15,6 +15,9 @@
         <label for="Ghast">Ghast Gens:</label>
         <input type="number" id="Ghast" name="ghast">
 
+        <label for="Sculk">Sculk Gens:</label>
+        <input type="number" id="sculk" name="sculk">
+
         <label for="Multiplier">Multiplier:</label>
         <select id="Multiplier" name="multiplier">
             <option value="1">1x</option>
@@ -61,6 +64,7 @@
 
             const ResinIncome = Resin * 4 * Multiplier * 100;
             const GhastIncome = Ghast * 4 * Multiplier * 125;
+            const Sculk = Sculk * 4 * Multiplier * 75;
             const IncomeSum = ResinIncome + GhastIncome;
 
             document.getElementById("Income1").innerHTML = formatNumber(IncomeSum) + "/min";
