@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGens</title>
+</head>
+
+<body>
+    <h1>Welcome to WebGens!</h1>
+    <p>Here you can calculate your income!</p>
+    <div>
+        <label for="Resin">Resin Gens:</label>
+        <input type="number" id="Resin">
+        <label for="Ghast">Ghast Gens:</label>
+        <input type="number" id="Ghast">
+        <label for="Multiplier">Multiplier:</label>
+        <input type="number" id="Multiplier"><br>
+        <button onclick="GenCalc()">Calculate</button>
+    </div>
+    <div>
+        <p id="Income1"></p>
+        <p id="Income2"></p>
+        <p id="Income3"></p>
+    </div>
+</body>
+<script>
+    function formatNumber(num) {
+    const absNum = Math.abs(num);
+    let formatted;
+
+    if (absNum >= 1e12) {
+        formatted = (num / 1e12).toFixed(2) + "T";
+    } else if (absNum >= 1e9) {
+        formatted = (num / 1e9).toFixed(2) + "B";
+    } else if (absNum >= 1e6) {
+        formatted = (num / 1e6).toFixed(2) + "M";
+    } else if (absNum >= 1e3) {
+        formatted = (num / 1e3).toFixed(2) + "K";
+    } else {
+        formatted = num.toFixed(2);
+    }
+
+    return formatted;
+}
+
+function GenCalc() {
+    let Resin = document.getElementById("Resin").value;
+    let Ghast = document.getElementById("Ghast").value;
+    let Multiplier = parseFloat(document.getElementById("Multiplier").value);
+
+    let ResinIncome = Resin * 4 * Multiplier * 100;
+    let GhastIncome = Ghast * 4 * Multiplier * 125;
+    let IncomeSum = ResinIncome + GhastIncome;
+
+    document.getElementById("Income1").innerHTML = formatNumber(IncomeSum) + "/min";
+    document.getElementById("Income2").innerHTML = formatNumber(IncomeSum * 60) + "/hour";
+    document.getElementById("Income3").innerHTML = formatNumber(IncomeSum * 60 * 24) + "/day";
+}
+
+</script>
+</html>
