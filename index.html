@@ -3,166 +3,488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGens</title>
+    <title>WebGens - Enhanced Calculator</title>
     <style>
-        html, body {
+        * {
             margin: 0;
             padding: 0;
-            height: 100%;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to right, #1c1c2b, #3b1647);
-            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            min-height: 100vh;
-            box-sizing: border-box;
         }
 
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-            background-color: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
             padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-            max-width: 900px;
-            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .flex-box {
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-            gap: 30px;
+        .form-section h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            text-align: center;
         }
 
-        .form-section, .output-section {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            width: 100%;
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .form-group {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .form-group label {
-            flex: 1;
-            font-size: 13px;
-            color: #ccc;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .form-group label[for="Sellchest"] {
-            color: #00ffaa;
-        }
-
-        .form-group input {
-            flex: 1;
-            margin-left: 8px;
-            padding: 4px;
-            font-size: 13px;
-        }
-
-        input, select, button {
+        .form-group input,         .form-group select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select option {
+            background: #2e2e3e;
+            color: white;
+            padding: 8px;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-group input:hover, .form-group select:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .multiplier-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .multiplier-section h3 {
+            color: white;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
             border: none;
-        }
-
-        input, select {
-            background-color: #2e2e3e;
-            color: white;
-        }
-
-        select {
-            padding: 6px;
-            font-size: 14px;
-            color: white;
-        }
-
-        button {
-            padding: 10px;
-            background: linear-gradient(to right, #7a5cff, #5f31c2);
-            color: white;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: bold;
-            margin-top: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .output-box {
-            background-color: #1f1f2e;
-            padding: 12px;
-            border-radius: 10px;
-            color: #00ffaa;
-            font-weight: bold;
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .output-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: fit-content;
+        }
+
+        .output-section h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .output-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .output-item {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(69, 183, 209, 0.2));
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .output-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.2);
+        }
+
+        .output-item .label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .output-item .value {
+            color: #4ecdc4;
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .control-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
 
         .footer {
-            text-align: right;
-            margin-top: 20px;
-            width: 100%;
-            font-size: 12px;
-            color: #aaa;
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .stats-section {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+
+        .stat-item .stat-value {
+            color: #4ecdc4;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 24px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 style="color:#ff91ea; font-size: 28px; margin-bottom: 10px;">WebGens</h1>
-        <div class="flex-box">
-            <form class="form-section" onsubmit="event.preventDefault(); GenCalc();">
-                <div class="form-group"><label for="Ghast">Ghast</label><input type="number" id="Ghast"></div>
-                <div class="form-group"><label for="Resin">Resin</label><input type="number" id="Resin"></div>
-                <div class="form-group"><label for="Sculk">Sculk</label><input type="number" id="Sculk"></div>
-                <div class="form-group"><label for="Amethyst">Amethyst</label><input type="number" id="Amethyst"></div>
-                <div class="form-group"><label for="Cr_Obsidian">Cr Obsidian</label><input type="number" id="Cr_Obsidian"></div>
-                <div class="form-group"><label for="Obsidian">Obsidian</label><input type="number" id="Obsidian"></div>
-                <div class="form-group"><label for="Netherite">Netherite</label><input type="number" id="Netherite"></div>
-                <div class="form-group"><label for="Diamond">Diamond</label><input type="number" id="Diamond"></div>
-                <div class="form-group"><label for="Gold">Gold</label><input type="number" id="Gold"></div>
-                <div class="form-group"><label for="Redstone">Redstone</label><input type="number" id="Redstone"></div>
-                <div class="form-group"><label for="Copper">Copper</label><input type="number" id="Copper"></div>
-                <div class="form-group"><label for="Iron">Iron</label><input type="number" id="Iron"></div>
-                <div class="form-group"><label for="Coal">Coal</label><input type="number" id="Coal"></div>
-                <div class="form-group"><label for="Prismarine">Prismarine</label><input type="number" id="Prismarine"></div>
-                <div class="form-group"><label for="Kelp">Kelp</label><input type="number" id="Kelp"></div>
-                <div class="form-group"><label for="Pumpkin">Pumpkin</label><input type="number" id="Pumpkin"></div>
-                <div class="form-group"><label for="Melon">Melon</label><input type="number" id="Melon"></div>
-                <div class="form-group"><label for="Wheat">Wheat</label><input type="number" id="Wheat"></div>
-                <div class="form-group"><label for="Sellchest">Sell Chest</label>
-                    <select id="Sellchest">
-                        <option value="1">1x</option>
-                        <option value="1.5">1.5x</option>
-                        <option value="2">2x</option>
-                        <option value="2.5">2.5x</option>
-                        <option value="3">3x</option>
-                        <option value="3.5">3.5x</option>
-                    </select>
+        <div class="header">
+            <h1>WebGens</h1>
+            <p>Advanced Generator Income Calculator</p>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2>Generator Configuration</h2>
+                
+                <div class="controls">
+                    <button class="control-btn" onclick="clearAll()">Clear All</button>
+                    <button class="control-btn" onclick="loadPreset()">Load Preset</button>
+                    <button class="control-btn" onclick="savePreset()">Save Preset</button>
                 </div>
-                <button type="submit">Calculate Income</button>
-            </form>
+
+                <form onsubmit="event.preventDefault(); GenCalc();">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="Ghast">Ghast</label>
+                            <input type="number" id="Ghast" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Resin">Resin</label>
+                            <input type="number" id="Resin" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Sculk">Sculk</label>
+                            <input type="number" id="Sculk" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Amethyst">Amethyst</label>
+                            <input type="number" id="Amethyst" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Cr_Obsidian">Cr Obsidian</label>
+                            <input type="number" id="Cr_Obsidian" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Obsidian">Obsidian</label>
+                            <input type="number" id="Obsidian" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Netherite">Netherite</label>
+                            <input type="number" id="Netherite" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Diamond">Diamond</label>
+                            <input type="number" id="Diamond" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Gold">Gold</label>
+                            <input type="number" id="Gold" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Redstone">Redstone</label>
+                            <input type="number" id="Redstone" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Copper">Copper</label>
+                            <input type="number" id="Copper" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Iron">Iron</label>
+                            <input type="number" id="Iron" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Coal">Coal</label>
+                            <input type="number" id="Coal" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Prismarine">Prismarine</label>
+                            <input type="number" id="Prismarine" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Kelp">Kelp</label>
+                            <input type="number" id="Kelp" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Pumpkin">Pumpkin</label>
+                            <input type="number" id="Pumpkin" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Melon">Melon</label>
+                            <input type="number" id="Melon" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="Wheat">Wheat</label>
+                            <input type="number" id="Wheat" min="0" step="1">
+                        </div>
+                    </div>
+
+                    <div class="multiplier-section">
+                        <h3>Income Multiplier</h3>
+                        <div class="form-group">
+                            <select id="Multiplier">
+                                <option value="1">1x - Base</option>
+                                <option value="1.5">1.5x - Premium</option>
+                                <option value="2">2x - VIP</option>
+                                <option value="2.5">2.5x - Elite</option>
+                                <option value="3">3x - Lava Chicken</option>
+                                <option value="3.5">3.5x - Ghast</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="button" class="calculate-btn" onclick="exportResults()">Export Results</button>
+                </form>
+            </div>
 
             <div class="output-section">
-                <div class="output-box" id="Income1">PER MINUTE: $0.00</div>
-                <div class="output-box" id="Income2">PER HOUR: $0.00</div>
-                <div class="output-box" id="Income3">PER DAY: $0.00</div>
+                <h2>Income Results</h2>
+                <div class="output-grid">
+                    <div class="output-item">
+                        <div class="label">Per Minute</div>
+                        <div class="value" id="Income1">$0.00</div>
+                    </div>
+                    <div class="output-item">
+                        <div class="label">Per Hour</div>
+                        <div class="value" id="Income2">$0.00</div>
+                    </div>
+                    <div class="output-item">
+                        <div class="label">Per Day</div>
+                        <div class="value" id="Income3">$0.00</div>
+                    </div>
+                    <div class="output-item">
+                        <div class="label">Per Week</div>
+                        <div class="value" id="Income4">$0.00</div>
+                    </div>
+                    <div class="output-item">
+                        <div class="label">Per Month</div>
+                        <div class="value" id="Income5">$0.00</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="footer">Made by Hitzlikedna & AlphaT51</div>
+
+        <div class="stats-section">
+            <h2 style="color: white; text-align: center; margin-bottom: 24px;">Generator Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">Total Generators</div>
+                    <div class="stat-value" id="totalGens">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Most Valuable</div>
+                    <div class="stat-value" id="mostValuable">-</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Efficiency Rating</div>
+                    <div class="stat-value" id="efficiency">0%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Avg per Generator</div>
+                    <div class="stat-value" id="avgPerGen">$0/min</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Made by Hitzlikedna & AlphaT51</p>
+        </div>
     </div>
 
     <script>
         function formatNumber(num) {
             const absNum = Math.abs(num);
+            if (absNum >= 1e15) return "$" + (num / 1e15).toFixed(2) + "Q";
             if (absNum >= 1e12) return "$" + (num / 1e12).toFixed(2) + "T";
             if (absNum >= 1e9) return "$" + (num / 1e9).toFixed(2) + "B";
             if (absNum >= 1e6) return "$" + (num / 1e6).toFixed(2) + "M";
@@ -172,7 +494,7 @@
 
         function GenCalc() {
             const ids = [
-                "Resin", "Ghast", "Sculk", "Amethyst", "Cr_Obsidian", "Obsidian", "Netherite",
+                "Ghast", "Resin", "Sculk", "Amethyst", "Cr_Obsidian", "Obsidian", "Netherite",
                 "Diamond", "Gold", "Redstone", "Copper", "Iron", "Coal", "Prismarine",
                 "Kelp", "Pumpkin", "Melon", "Wheat"
             ];
@@ -181,39 +503,182 @@
                 Ghast: 125,
                 Resin: 100,
                 Sculk: 75,
-                Amethyst: 58,
-                Cr_Obsidian: 45,
-                Obsidian: 35,
-                Netherite: 28,
-                Diamond: 20,
-                Gold: 15,
-                Redstone: 10,
-                Copper: 10,
-                Iron: 6,
-                Coal: 4,
-                Prismarine: 3.5,
-                Kelp: 2.5,
-                Pumpkin: 2,
-                Melon: 1.5,
-                Wheat: 0.5
+                Amethyst: 70,
+                Cr_Obsidian: 95,
+                Obsidian: 80,
+                Netherite: 300,
+                Diamond: 200,
+                Gold: 150,
+                Redstone: 120,
+                Copper: 100,
+                Iron: 90,
+                Coal: 60,
+                Prismarine: 85,
+                Kelp: 50,
+                Pumpkin: 45,
+                Melon: 40,
+                Wheat: 35
             };
 
             const values = {};
+            let totalGenerators = 0;
+            let maxValue = 0;
+            let mostValuableGen = "";
+
             ids.forEach(id => {
-                values[id] = parseFloat(document.getElementById(id).value) || 0;
+                const value = parseFloat(document.getElementById(id).value) || 0;
+                values[id] = value;
+                totalGenerators += value;
+                
+                const genValue = value * rates[id];
+                if (genValue > maxValue) {
+                    maxValue = genValue;
+                    mostValuableGen = id;
+                }
             });
 
-            const sellchest = parseFloat(document.getElementById("Sellchest").value) || 1;
+            const multiplier = parseFloat(document.getElementById("Multiplier").value) || 1;
 
             let totalIncome = 0;
             ids.forEach(id => {
-                totalIncome += values[id] * 4 * sellchest * (rates[id] || 0);
+                totalIncome += values[id] * 4 * multiplier * (rates[id] || 0);
             });
 
-            document.getElementById("Income1").innerHTML = "PER MINUTE: " + formatNumber(totalIncome);
-            document.getElementById("Income2").innerHTML = "PER HOUR: " + formatNumber(totalIncome * 60);
-            document.getElementById("Income3").innerHTML = "PER DAY: " + formatNumber(totalIncome * 60 * 24);
+            // Update income displays
+            document.getElementById("Income1").textContent = formatNumber(totalIncome);
+            document.getElementById("Income2").textContent = formatNumber(totalIncome * 60);
+            document.getElementById("Income3").textContent = formatNumber(totalIncome * 60 * 24);
+            document.getElementById("Income4").textContent = formatNumber(totalIncome * 60 * 24 * 7);
+            document.getElementById("Income5").textContent = formatNumber(totalIncome * 60 * 24 * 30);
+
+            // Update statistics
+            document.getElementById("totalGens").textContent = totalGenerators;
+            document.getElementById("mostValuable").textContent = mostValuableGen || "-";
+            
+            // Calculate efficiency (higher rate generators / total generators)
+            const highEfficiencyCount = ids.reduce((count, id) => {
+                return count + (rates[id] >= 100 ? values[id] : 0);
+            }, 0);
+            const efficiency = totalGenerators > 0 ? Math.round((highEfficiencyCount / totalGenerators) * 100) : 0;
+            document.getElementById("efficiency").textContent = efficiency + "%";
+            
+            // Calculate average income per generator
+            const avgPerGen = totalGenerators > 0 ? totalIncome / totalGenerators : 0;
+            document.getElementById("avgPerGen").textContent = formatNumber(avgPerGen) + "/min";
+
+            // Add animation to updated values
+            const outputItems = document.querySelectorAll('.output-item');
+            outputItems.forEach(item => {
+                item.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    item.style.transform = 'scale(1)';
+                }, 200);
+            });
         }
+
+        function clearAll() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            document.getElementById('Multiplier').value = '1';
+            GenCalc();
+        }
+
+        function exportResults() {
+            const results = {
+                timestamp: new Date().toISOString(),
+                configuration: {},
+                results: {
+                    perMinute: document.getElementById('Income1').textContent,
+                    perHour: document.getElementById('Income2').textContent,
+                    perDay: document.getElementById('Income3').textContent,
+                    perWeek: document.getElementById('Income4').textContent,
+                    perMonth: document.getElementById('Income5').textContent
+                },
+                statistics: {
+                    totalGenerators: document.getElementById('totalGens').textContent,
+                    mostValuable: document.getElementById('mostValuable').textContent,
+                    efficiency: document.getElementById('efficiency').textContent,
+                    avgPerGen: document.getElementById('avgPerGen').textContent
+                }
+            };
+            
+            // Get current configuration
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                if (input.value) {
+                    results.configuration[input.id] = input.value;
+                }
+            });
+            results.configuration.multiplier = document.getElementById('Multiplier').value;
+            
+            const resultData = JSON.stringify(results, null, 2);
+            const blob = new Blob([resultData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `webgens-results-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+            const preset = {
+                multiplier: document.getElementById('Multiplier').value
+            };
+            
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                preset[input.id] = input.value;
+            });
+            function savePreset() {
+            const presetData = JSON.stringify(preset);
+            const blob = new Blob([presetData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'webgens-preset.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function loadPreset() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const preset = JSON.parse(e.target.result);
+                            Object.keys(preset).forEach(key => {
+                                const element = document.getElementById(key);
+                                if (element) {
+                                    element.value = preset[key];
+                                }
+                            });
+                            GenCalc();
+                        } catch (error) {
+                            alert('Invalid preset file');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // Auto-calculate on input change
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', GenCalc);
+            });
+        });
+
+        // Initial calculation
+        GenCalc();
     </script>
 </body>
 </html>
