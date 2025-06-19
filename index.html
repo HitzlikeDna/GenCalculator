@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGens - Enhanced Calculator</title>
+    <title>GenCalculator - Enhanced Calculator</title>
     <style>
         * {
             margin: 0;
@@ -309,7 +309,7 @@
             }
             
             .header h1 {
-                font-size: 2rem;
+                font-size: 4rem;
             }
             
             .container {
@@ -321,8 +321,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>WebGens</h1>
-            <p>Advanced Generator Income Calculator</p>
+            <h1>GenCalculator</h1>
         </div>
 
         <div class="main-content">
@@ -465,7 +464,7 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Most Valuable</div>
-                    <div class="stat-value" id="mostValuable">-</div>
+                    <div class="stat-value" id="Most Profitable">-</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Efficiency Rating</div>
@@ -620,7 +619,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `webgens-results-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `GenCalculator-results-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -647,7 +646,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'webgens-preset.json';
+    a.download = 'GenCalculator-preset.json';
     a.click();
     URL.revokeObjectURL(url);
 }
