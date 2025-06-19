@@ -46,9 +46,18 @@
         }
 
         function GenCalc() {
-            const Resin = parseFloat(document.getElementById("Resin").value) || 0;
-            const Ghast = parseFloat(document.getElementById("Ghast").value) || 0;
-            const Multiplier = parseFloat(document.getElementById("Multiplier").value);
+        const ids = [
+            "Ghast", "Resin", "Sculk", "Amethyst", "Cr_Obsidian", "Obsidian", "Netherite",
+            "Diamond", "Gold", "Redstone", "Copper", "Iron", "Coal", "Prismarine",
+            "Kelp", "Pumpkin", "Melon", "Wheat"
+        ];
+
+        const values = {};
+        ids.forEach(id => {
+            values[id] = parseFloat(document.getElementById(id).value) || 0;
+        });
+
+        const Multiplier = parseFloat(document.getElementById("Multiplier").value) || 1;
 
             const ResinIncome = Resin * 4 * Multiplier * 100;
             const GhastIncome = Ghast * 4 * Multiplier * 125;
