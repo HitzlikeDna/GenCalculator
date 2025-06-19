@@ -4,37 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGens</title>
-    <style>
-        .dropdown {
-            position: relative;
-            display: inline-block;
-            user-select: none;
-        }
-        .dropdown-toggle {
-            padding: 8px 12px;
-            border: 1px solid #aaa;
-            cursor: pointer;
-            background-color: #fff;
-        }
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: white;
-            border: 1px solid #aaa;
-            min-width: 100px;
-            z-index: 1;
-        }
-        .dropdown-menu div {
-            padding: 8px;
-            cursor: pointer;
-        }
-        .dropdown-menu div:hover {
-            background-color: #eee;
-        }
-        .show {
-            display: block;
-        }
-    </style>
 </head>
 <body>
     <h1>Welcome to WebGens!</h1>
@@ -44,19 +13,15 @@
         <input type="number" id="Resin">
         <label for="Ghast">Ghast Gens:</label>
         <input type="number" id="Ghast">
-        <label>Multiplier:</label>
-        <div class="dropdown" id="dropdown">
-            <div class="dropdown-toggle" id="dropdownToggle">Select Multiplier</div>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <div data-value="1">1x</div>
-                <div data-value="1.5">1.5x</div>
-                <div data-value="2">2x</div>
-                <div data-value="2.5">2.5x</div>
-                <div data-value="3">3x</div>
-                <div data-value="3.5">3.5x</div>
-            </div>
-        </div>
-        <input type="hidden" id="Multiplier" value="1"><br>
+        <label for="Multiplier">Multiplier:</label>
+        <select id="Multiplier">
+            <option value="1">1x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x</option>
+            <option value="2.5">2.5x</option>
+            <option value="3">3x</option>
+            <option value="3.5">3.5x</option>
+        </select><br>
         <button onclick="GenCalc()">Calculate</button>
     </div>
     <div>
@@ -66,24 +31,6 @@
     </div>
 
     <script>
-        const dropdown = document.getElementById("dropdown");
-        const toggle = document.getElementById("dropdownToggle");
-        const menu = document.getElementById("dropdownMenu");
-        const multiplierInput = document.getElementById("Multiplier");
-
-        toggle.addEventListener("click", () => {
-            menu.classList.toggle("show");
-        });
-
-        menu.querySelectorAll("div").forEach(option => {
-            option.addEventListener("click", () => {
-                const value = option.getAttribute("data-value");
-                multiplierInput.value = value;
-                toggle.textContent = option.textContent;
-                menu.classList.remove("show");
-            });
-        });
-
         function formatNumber(num) {
             const absNum = Math.abs(num);
             if (absNum >= 1e12) return (num / 1e12).toFixed(2) + "T";
@@ -96,7 +43,7 @@
         function GenCalc() {
             const Resin = parseFloat(document.getElementById("Resin").value) || 0;
             const Ghast = parseFloat(document.getElementById("Ghast").value) || 0;
-            const Multiplier = parseFloat(multiplierInput.value);
+            const Multiplier = parseFloat(document.getElementById("Multiplier").value);
 
             const ResinIncome = Resin * 4 * Multiplier * 100;
             const GhastIncome = Ghast * 4 * Multiplier * 125;
@@ -106,13 +53,6 @@
             document.getElementById("Income2").innerHTML = formatNumber(IncomeSum * 60) + "/hour";
             document.getElementById("Income3").innerHTML = formatNumber(IncomeSum * 60 * 24) + "/day";
         }
-
-        // Close dropdown if clicked outside
-        window.addEventListener("click", function (e) {
-            if (!dropdown.contains(e.target)) {
-                menu.classList.remove("show");
-            }
-        });
     </script>
 </body>
 </html>
