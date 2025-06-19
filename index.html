@@ -4,93 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGens</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #1c1c2b, #3b1647);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            gap: 50px;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-section, .output-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 300px;
+        }
+
+        h1 {
+            color: #ff91ea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        input, select, button {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+        }
+
+        input, select {
+            background-color: #2e2e3e;
+            color: white;
+        }
+
+        button {
+            background: linear-gradient(to right, #7a5cff, #5f31c2);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 16px;
+        }
+
+        .output-box {
+            background-color: #1f1f2e;
+            padding: 16px;
+            border-radius: 10px;
+            color: #00ffaa;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to WebGens!</h1>
-    <p>Here you can calculate your income!</p>
-    <form onsubmit="event.preventDefault(); GenCalc();">
-        <label for="Resin">Resin Gens:</label>
-        <input type="number" id="Resin" name="Resin">
+    <div class="container">
+        <form class="form-section" onsubmit="event.preventDefault(); GenCalc();">
+            <h1>WebGens</h1>
+            <label for="Resin">Resin Gens</label>
+            <input type="number" id="Resin" name="Resin">
+            <label for="Ghast">Ghast Gens</label>
+            <input type="number" id="Ghast" name="Ghast">
+            <label for="Sculk">Sculk Gens</label>
+            <input type="number" id="Sculk" name="Sculk">
+            <label for="Amethyst">Amethyst Gens</label>
+            <input type="number" id="Amethyst" name="Amethyst">
+            <label for="Cr_Obsidian">Cr_Obsidian Gens</label>
+            <input type="number" id="Cr_Obsidian" name="Cr_Obsidian">
+            <label for="Obsidian">Obsidian Gens</label>
+            <input type="number" id="Obsidian" name="Obsidian">
+            <label for="Netherite">Netherite Gens</label>
+            <input type="number" id="Netherite" name="Netherite">
+            <label for="Diamond">Diamond Gens</label>
+            <input type="number" id="Diamond" name="Diamond">
+            <label for="Gold">Gold Gens</label>
+            <input type="number" id="Gold" name="Gold">
+            <label for="Redstone">Redstone Gens</label>
+            <input type="number" id="Redstone" name="Redstone">
+            <label for="Copper">Copper Gens</label>
+            <input type="number" id="Copper" name="Copper">
+            <label for="Iron">Iron Gens</label>
+            <input type="number" id="Iron" name="Iron">
+            <label for="Coal">Coal Gens</label>
+            <input type="number" id="Coal" name="Coal">
+            <label for="Prismarine">Prismarine Gens</label>
+            <input type="number" id="Prismarine" name="Prismarine">
+            <label for="Kelp">Kelp Gens</label>
+            <input type="number" id="Kelp" name="Kelp">
+            <label for="Pumpkin">Pumpkin Gens</label>
+            <input type="number" id="Pumpkin" name="Pumpkin">
+            <label for="Melon">Melon Gens</label>
+            <input type="number" id="Melon" name="Melon">
+            <label for="Wheat">Wheat Gens</label>
+            <input type="number" id="Wheat" name="Wheat">
+            <label for="Multiplier">Multiplier</label>
+            <select id="Multiplier" name="multiplier">
+                <option value="1">1x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2">2x</option>
+                <option value="2.5">2.5x</option>
+                <option value="3">3x</option>
+                <option value="3.5">3.5x</option>
+            </select>
+            <button type="submit">Calculate Income</button>
+        </form>
 
-        <label for="Ghast">Ghast Gens:</label>
-        <input type="number" id="Ghast" name="Ghast">
-
-        <label for="Sculk">Sculk Gens:</label>
-        <input type="number" id="Sculk" name="Sculk">
-
-        <label for="Amethyst">Amethyst Gens:</label>
-        <input type="number" id="Amethyst" name="Amethyst">
-
-        <label for="Cr_Obsidian">Cr_Obsidian Gens:</label>
-        <input type="number" id="Cr_Obsidian" name="Cr_Obsidian">
-
-        <label for="Obsidian">Obsidian Gens:</label>
-        <input type="number" id="Obsidian" name="Obsidian">
-
-        <label for="Netherite">Netherite Gens:</label>
-        <input type="number" id="Netherite" name="Netherite">
-
-        <label for="Diamond">Diamond Gens:</label>
-        <input type="number" id="Diamond" name="Diamond">
-
-        <label for="Gold">Gold Gens:</label>
-        <input type="number" id="Gold" name="Gold">
-
-        <label for="Redstone">Redstone Gens:</label>
-        <input type="number" id="Redstone" name="Redstone">
-
-        <label for="Copper">Copper Gens:</label>
-        <input type="number" id="Copper" name="Copper">
-
-        <label for="Iron">Iron Gens:</label>
-        <input type="number" id="Iron" name="Iron">
-
-        <label for="Coal">Coal Gens:</label>
-        <input type="number" id="Coal" name="Coal">
-
-        <label for="Prismarine">Prismarine Gens:</label>
-        <input type="number" id="Prismarine" name="Prismarine">
-
-        <label for="Kelp">Kelp Gens:</label>
-        <input type="number" id="Kelp" name="Kelp">
-
-        <label for="Pumpkin">Pumpkin Gens:</label>
-        <input type="number" id="Pumpkin" name="Pumpkin">
-
-        <label for="Melon">Melon Gens:</label>
-        <input type="number" id="Melon" name="Melon">
-
-        <label for="Wheat">Wheat Gens:</label>
-        <input type="number" id="Wheat" name="Wheat">
-
-        <label for="Multiplier">Multiplier:</label>
-        <select id="Multiplier" name="multiplier">
-            <option value="1">1x</option>
-            <option value="1.5">1.5x</option>
-            <option value="2">2x</option>
-            <option value="2.5">2.5x</option>
-            <option value="3">3x</option>
-            <option value="3.5">3.5x</option>
-        </select>
-
-        <br><br>
-        <input type="submit" value="Calculate">
-    </form>
-
-    <div>
-        <p id="Income1"></p>
-        <p id="Income2"></p>
-        <p id="Income3"></p>
+        <div class="output-section">
+            <div class="output-box" id="Income1">PER MINUTE: $0.00</div>
+            <div class="output-box" id="Income2">PER HOUR: $0.00</div>
+            <div class="output-box" id="Income3">PER DAY: $0.00</div>
+        </div>
     </div>
 
     <script>
         function formatNumber(num) {
             const absNum = Math.abs(num);
-            if (absNum >= 1e12) return (num / 1e12).toFixed(2) + "T";
-            if (absNum >= 1e9) return (num / 1e9).toFixed(2) + "B";
-            if (absNum >= 1e6) return (num / 1e6).toFixed(2) + "M";
-            if (absNum >= 1e3) return (num / 1e3).toFixed(2) + "K";
-            return num.toFixed(2);
+            if (absNum >= 1e12) return "$" + (num / 1e12).toFixed(2) + "T";
+            if (absNum >= 1e9) return "$" + (num / 1e9).toFixed(2) + "B";
+            if (absNum >= 1e6) return "$" + (num / 1e6).toFixed(2) + "M";
+            if (absNum >= 1e3) return "$" + (num / 1e3).toFixed(2) + "K";
+            return "$" + num.toFixed(2);
         }
 
         function GenCalc() {
@@ -133,9 +185,9 @@
                 totalIncome += values[id] * 4 * Multiplier * (rates[id] || 0);
             });
 
-            document.getElementById("Income1").innerHTML = formatNumber(totalIncome) + "/min";
-            document.getElementById("Income2").innerHTML = formatNumber(totalIncome * 60) + "/hour";
-            document.getElementById("Income3").innerHTML = formatNumber(totalIncome * 60 * 24) + "/day";
+            document.getElementById("Income1").innerHTML = "PER MINUTE: " + formatNumber(totalIncome);
+            document.getElementById("Income2").innerHTML = "PER HOUR: " + formatNumber(totalIncome * 60);
+            document.getElementById("Income3").innerHTML = "PER DAY: " + formatNumber(totalIncome * 60 * 24);
         }
     </script>
 </body>
