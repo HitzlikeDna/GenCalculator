@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #3a0ca3 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,6 +22,8 @@
         }
 
         .container {
+            transform: scale(0.8);
+            transform-origin: top center;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -86,7 +88,7 @@
         }
 
         .form-section h2 {
-            color: white;
+            color: rgb(225, 225, 225);
             font-size: 1.5rem;
             margin-bottom: 24px;
             text-align: center;
@@ -106,7 +108,7 @@
         }
 
         .form-group label {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgb(225, 225, 225, 0.9);
             font-weight: 500;
             font-size: 0.9rem;
             text-transform: uppercase;
@@ -156,7 +158,7 @@
 
         .calculate-btn {
             width: 100%;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(to right, #7a5cff, #5f31c2);
             color: white;
             border: none;
             border-radius: 12px;
@@ -630,44 +632,53 @@
             inputs.forEach(input => {
                 preset[input.id] = input.value;
             });
-            function savePreset() {
-            const presetData = JSON.stringify(preset);
-            const blob = new Blob([presetData], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'webgens-preset.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
+        
+        function savePreset() {
+    const preset = {
+        multiplier: document.getElementById('Multiplier').value
+    };
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+        preset[input.id] = input.value || "0";
+    });
 
-        function loadPreset() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        try {
-                            const preset = JSON.parse(e.target.result);
-                            Object.keys(preset).forEach(key => {
-                                const element = document.getElementById(key);
-                                if (element) {
-                                    element.value = preset[key];
-                                }
-                            });
-                            GenCalc();
-                        } catch (error) {
-                            alert('Invalid preset file');
+    const presetData = JSON.stringify(preset, null, 2);
+    const blob = new Blob([presetData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'webgens-preset.json';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function loadPreset() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const preset = JSON.parse(e.target.result);
+                    Object.keys(preset).forEach(key => {
+                        const element = document.getElementById(key);
+                        if (element) {
+                            element.value = preset[key];
                         }
-                    };
-                    reader.readAsText(file);
+                    });
+                    GenCalc();
+                } catch (error) {
+                    alert('Invalid preset file');
                 }
             };
-            input.click();
+            reader.readAsText(file);
         }
+    };
+    input.click();
+}
 
         // Auto-calculate on input change
         document.addEventListener('DOMContentLoaded', function() {
