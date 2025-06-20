@@ -648,13 +648,13 @@
             });
         
         function savePreset() {
-    const preset = {
+    /*const preset = {
         multiplier: document.getElementById('Multiplier').value
     };
     const inputs = document.querySelectorAll('input[type="number"]');
     inputs.forEach(input => {
         preset[input.id] = input.value || "0";
-    });
+    });*/
 
     const presetData = JSON.stringify(preset, null, 2);
     const blob = new Blob([presetData], { type: 'application/json' });
