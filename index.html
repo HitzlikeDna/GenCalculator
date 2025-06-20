@@ -411,7 +411,7 @@
                     </div>
 
                     <div class="multiplier-section">
-                        <h3>Sell Chest</h3>
+                        <h3>Income Multiplier</h3>
                         <div class="form-group">
                             <select id="Multiplier">
                                 <option value="1">1x - Base</option>
@@ -464,7 +464,7 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Most Valuable</div>
-                    <div class="stat-value" id="mostValuable">-</div>
+                    <div class="stat-value" id="Most Profitable">-</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Efficiency Rating</div>
@@ -504,21 +504,21 @@
                 Ghast: 125,
                 Resin: 100,
                 Sculk: 75,
-                Amethyst: 58,
-                Cr_Obsidian: 45,
-                Obsidian: 35,
-                Netherite: 28,
-                Diamond: 20,
-                Gold: 15,
-                Redstone: 10,
-                Copper: 10,
-                Iron: 6,
-                Coal: 4,
-                Prismarine: 3.5,
-                Kelp: 2.5,
-                Pumpkin: 2,
-                Melon: 1.5,
-                Wheat: 0.5
+                Amethyst: 70,
+                Cr_Obsidian: 95,
+                Obsidian: 80,
+                Netherite: 300,
+                Diamond: 200,
+                Gold: 150,
+                Redstone: 120,
+                Copper: 100,
+                Iron: 90,
+                Coal: 60,
+                Prismarine: 85,
+                Kelp: 50,
+                Pumpkin: 45,
+                Melon: 40,
+                Wheat: 35
             };
 
             const values = {};
@@ -599,7 +599,7 @@
                 },
                 statistics: {
                     totalGenerators: document.getElementById('totalGens').textContent,
-                    mostValuable: document.querySelector('[id="Most Profitable"]').textContent,
+                    mostValuable: document.getElementById('mostValuable').textContent,
                     efficiency: document.getElementById('efficiency').textContent,
                     avgPerGen: document.getElementById('avgPerGen').textContent
                 }
@@ -619,7 +619,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = GenCalculator-results-${new Date().toISOString().split('T')[0]}.json;
+            a.download = `GenCalculator-results-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
