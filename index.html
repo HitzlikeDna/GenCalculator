@@ -482,7 +482,7 @@
         </div>
     </div>
 
-    <script>
+<script>
 function formatNumber(num) {
     const absNum = Math.abs(num);
     if (absNum >= 1e15) return "$" + (num / 1e15).toFixed(2) + "Q";
@@ -582,41 +582,41 @@ function clearAll() {
 }
 
 function exportResults() {
-    const sellChestValue = document.getElementById('Multiplier').value;
-    const sellChestLabel = document.getElementById('Multiplier').selectedOptions[0].text;
-
-    const lines = [];
-
-    lines.push(`GenCalculator Results - ${new Date().toLocaleString()}`);
-    lines.push('');
-    lines.push('--- Configuration ---');
+    const results = {
+        timestamp: new Date().toISOString(),
+        configuration: {},
+        results: {
+            perMinute: document.getElementById('Income1').textContent,
+            perHour: document.getElementById('Income2').textContent,
+            perDay: document.getElementById('Income3').textContent,
+            perWeek: document.getElementById('Income4').textContent,
+            perMonth: document.getElementById('Income5').textContent
+        },
+        statistics: {
+            totalGenerators: document.getElementById('totalGens').textContent,
+            mostValuable: document.getElementById('Most Profitable').textContent,
+            efficiency: document.getElementById('efficiency').textContent,
+            avgPerGen: document.getElementById('avgPerGen').textContent
+        }
+    };
 
     const inputs = document.querySelectorAll('input[type="number"]');
     inputs.forEach(input => {
-        const val = input.value || "0";
-        lines.push(`${input.id}: ${val}`);
+        if (input.value) {
+            results.configuration[input.id] = input.value;
+        }
     });
+    results.configuration.sellChest = {
+        value: document.getElementById('Multiplier').value,
+        label: document.getElementById('Multiplier').selectedOptions[0].text
+    };
 
-    lines.push(`Sell Chest: ${sellChestLabel} (${sellChestValue}x)`);
-    lines.push('');
-    lines.push('--- Income ---');
-    lines.push(`Per Minute: ${document.getElementById('Income1').textContent}`);
-    lines.push(`Per Hour: ${document.getElementById('Income2').textContent}`);
-    lines.push(`Per Day: ${document.getElementById('Income3').textContent}`);
-    lines.push(`Per Week: ${document.getElementById('Income4').textContent}`);
-    lines.push(`Per Month: ${document.getElementById('Income5').textContent}`);
-    lines.push('');
-    lines.push('--- Statistics ---');
-    lines.push(`Total Generators: ${document.getElementById('totalGens').textContent}`);
-    lines.push(`Most Valuable: ${document.getElementById('Most Profitable').textContent}`);
-    lines.push(`Efficiency: ${document.getElementById('efficiency').textContent}`);
-    lines.push(`Average per Generator: ${document.getElementById('avgPerGen').textContent}`);
-
-    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const resultData = JSON.stringify(results, null, 2);
+    const blob = new Blob([resultData], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `GenCalculator-results-${new Date().toISOString().split('T')[0]}.txt`;
+    a.download = `GenCalculator-results-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
 }
@@ -657,6 +657,12 @@ function loadPreset() {
                             element.value = preset[key];
                         }
                     });
+
+                    // Use direct assignment for multiplier
+                    if (preset.sellChest && preset.sellChest.value !== undefined) {
+                        document.getElementById('Multiplier').value = preset.sellChest.value.toString();
+                    }
+
                     GenCalc();
                 } catch (error) {
                     alert('Invalid preset file');
