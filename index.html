@@ -483,156 +483,145 @@
     </div>
 
     <script>
-        function formatNumber(num) {
-            const absNum = Math.abs(num);
-            if (absNum >= 1e15) return "$" + (num / 1e15).toFixed(2) + "Q";
-            if (absNum >= 1e12) return "$" + (num / 1e12).toFixed(2) + "T";
-            if (absNum >= 1e9) return "$" + (num / 1e9).toFixed(2) + "B";
-            if (absNum >= 1e6) return "$" + (num / 1e6).toFixed(2) + "M";
-            if (absNum >= 1e3) return "$" + (num / 1e3).toFixed(2) + "K";
-            return "$" + num.toFixed(2);
+function formatNumber(num) {
+    const absNum = Math.abs(num);
+    if (absNum >= 1e15) return "$" + (num / 1e15).toFixed(2) + "Q";
+    if (absNum >= 1e12) return "$" + (num / 1e12).toFixed(2) + "T";
+    if (absNum >= 1e9) return "$" + (num / 1e9).toFixed(2) + "B";
+    if (absNum >= 1e6) return "$" + (num / 1e6).toFixed(2) + "M";
+    if (absNum >= 1e3) return "$" + (num / 1e3).toFixed(2) + "K";
+    return "$" + num.toFixed(2);
+}
+
+function GenCalc() {
+    const ids = [
+        "Ghast", "Resin", "Sculk", "Amethyst", "Cr_Obsidian", "Obsidian", "Netherite",
+        "Diamond", "Gold", "Redstone", "Copper", "Iron", "Coal", "Prismarine",
+        "Kelp", "Pumpkin", "Melon", "Wheat"
+    ];
+
+    const rates = {
+        Ghast: 125,
+        Resin: 100,
+        Sculk: 75,
+        Amethyst: 58,
+        Cr_Obsidian: 45,
+        Obsidian: 35,
+        Netherite: 28,
+        Diamond: 20,
+        Gold: 15,
+        Redstone: 10,
+        Copper: 10,
+        Iron: 6,
+        Coal: 4,
+        Prismarine: 3.5,
+        Kelp: 2.5,
+        Pumpkin: 2,
+        Melon: 1.5,
+        Wheat: 0.5
+    };
+
+    const values = {};
+    let totalGenerators = 0;
+    let maxValue = 0;
+    let mostValuableGen = "";
+
+    ids.forEach(id => {
+        const value = parseFloat(document.getElementById(id).value) || 0;
+        values[id] = value;
+        totalGenerators += value;
+
+        const genValue = value * rates[id];
+        if (genValue > maxValue) {
+            maxValue = genValue;
+            mostValuableGen = id;
         }
+    });
 
-        function GenCalc() {
-            const ids = [
-                "Ghast", "Resin", "Sculk", "Amethyst", "Cr_Obsidian", "Obsidian", "Netherite",
-                "Diamond", "Gold", "Redstone", "Copper", "Iron", "Coal", "Prismarine",
-                "Kelp", "Pumpkin", "Melon", "Wheat"
-            ];
+    const multiplier = parseFloat(document.getElementById("Multiplier").value) || 1;
 
-            const rates = {
-                Ghast: 125,
-                Resin: 100,
-                Sculk: 75,
-                Amethyst: 58,
-                Cr_Obsidian: 45,
-                Obsidian: 35,
-                Netherite: 28,
-                Diamond: 20,
-                Gold: 15,
-                Redstone: 10,
-                Copper: 10,
-                Iron: 6,
-                Coal: 4,
-                Prismarine: 3.5,
-                Kelp: 2.5,
-                Pumpkin: 2,
-                Melon: 1.5,
-                Wheat: 0.5
-            };
+    let totalIncome = 0;
+    ids.forEach(id => {
+        totalIncome += values[id] * 4 * multiplier * (rates[id] || 0);
+    });
 
-            const values = {};
-            let totalGenerators = 0;
-            let maxValue = 0;
-            let mostValuableGen = "";
+    document.getElementById("Income1").textContent = formatNumber(totalIncome);
+    document.getElementById("Income2").textContent = formatNumber(totalIncome * 60);
+    document.getElementById("Income3").textContent = formatNumber(totalIncome * 60 * 24);
+    document.getElementById("Income4").textContent = formatNumber(totalIncome * 60 * 24 * 7);
+    document.getElementById("Income5").textContent = formatNumber(totalIncome * 60 * 24 * 30);
 
-            ids.forEach(id => {
-                const value = parseFloat(document.getElementById(id).value) || 0;
-                values[id] = value;
-                totalGenerators += value;
-                
-                const genValue = value * rates[id];
-                if (genValue > maxValue) {
-                    maxValue = genValue;
-                    mostValuableGen = id;
-                }
-            });
+    document.getElementById("totalGens").textContent = totalGenerators;
+    document.getElementById("Most Profitable").textContent = mostValuableGen || "-";
 
-            const multiplier = parseFloat(document.getElementById("Multiplier").value) || 1;
+    const highEfficiencyCount = ids.reduce((count, id) => {
+        return count + (rates[id] >= 100 ? values[id] : 0);
+    }, 0);
+    const efficiency = totalGenerators > 0 ? Math.round((highEfficiencyCount / totalGenerators) * 100) : 0;
+    document.getElementById("efficiency").textContent = efficiency + "%";
 
-            let totalIncome = 0;
-            ids.forEach(id => {
-                totalIncome += values[id] * 4 * multiplier * (rates[id] || 0);
-            });
+    const avgPerGen = totalGenerators > 0 ? totalIncome / totalGenerators : 0;
+    document.getElementById("avgPerGen").textContent = formatNumber(avgPerGen) + "/min";
 
-            // Update income displays
-            document.getElementById("Income1").textContent = formatNumber(totalIncome);
-            document.getElementById("Income2").textContent = formatNumber(totalIncome * 60);
-            document.getElementById("Income3").textContent = formatNumber(totalIncome * 60 * 24);
-            document.getElementById("Income4").textContent = formatNumber(totalIncome * 60 * 24 * 7);
-            document.getElementById("Income5").textContent = formatNumber(totalIncome * 60 * 24 * 30);
+    const outputItems = document.querySelectorAll('.output-item');
+    outputItems.forEach(item => {
+        item.style.transform = 'scale(1.05)';
+        setTimeout(() => {
+            item.style.transform = 'scale(1)';
+        }, 200);
+    });
+}
 
-            // Update statistics
-            document.getElementById("totalGens").textContent = totalGenerators;
-            document.getElementById("Most Profitable").textContent = mostValuableGen || "-";
-            
-            // Calculate efficiency (higher rate generators / total generators)
-            const highEfficiencyCount = ids.reduce((count, id) => {
-                return count + (rates[id] >= 100 ? values[id] : 0);
-            }, 0);
-            const efficiency = totalGenerators > 0 ? Math.round((highEfficiencyCount / totalGenerators) * 100) : 0;
-            document.getElementById("efficiency").textContent = efficiency + "%";
-            
-            // Calculate average income per generator
-            const avgPerGen = totalGenerators > 0 ? totalIncome / totalGenerators : 0;
-            document.getElementById("avgPerGen").textContent = formatNumber(avgPerGen) + "/min";
+function clearAll() {
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+        input.value = '';
+    });
+    document.getElementById('Multiplier').value = '1';
+    GenCalc();
+}
 
-            // Add animation to updated values
-            const outputItems = document.querySelectorAll('.output-item');
-            outputItems.forEach(item => {
-                item.style.transform = 'scale(1.05)';
-                setTimeout(() => {
-                    item.style.transform = 'scale(1)';
-                }, 200);
-            });
-        }
+function exportResults() {
+    const sellChestValue = document.getElementById('Multiplier').value;
+    const sellChestLabel = document.getElementById('Multiplier').selectedOptions[0].text;
 
-        function clearAll() {
-            const inputs = document.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                input.value = '';
-            });
-            document.getElementById('Multiplier').value = '1';
-            GenCalc();
-        }
+    const lines = [];
 
-        function exportResults() {
-            const results = {
-                timestamp: new Date().toISOString(),
-                configuration: {},
-                results: {
-                    perMinute: document.getElementById('Income1').textContent,
-                    perHour: document.getElementById('Income2').textContent,
-                    perDay: document.getElementById('Income3').textContent,
-                    perWeek: document.getElementById('Income4').textContent,
-                    perMonth: document.getElementById('Income5').textContent
-                },
-                statistics: {
-                    totalGenerators: document.getElementById('totalGens').textContent,
-                    mostValuable: document.getElementById('mostValuable').textContent,
-                    efficiency: document.getElementById('efficiency').textContent,
-                    avgPerGen: document.getElementById('avgPerGen').textContent
-                }
-            };
-            
-            // Get current configuration
-            const inputs = document.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                if (input.value) {
-                    results.configuration[input.id] = input.value;
-                }
-            });
-            results.configuration.multiplier = document.getElementById('Multiplier').value;
-            
-            const resultData = JSON.stringify(results, null, 2);
-            const blob = new Blob([resultData], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `GenCalculator-results-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-            const preset = {
-                multiplier: document.getElementById('Multiplier').value
-            };
-            
-            const inputs = document.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                preset[input.id] = input.value;
-            });
-        
-        function savePreset() {
+    lines.push(`GenCalculator Results - ${new Date().toLocaleString()}`);
+    lines.push('');
+    lines.push('--- Configuration ---');
+
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+        const val = input.value || "0";
+        lines.push(`${input.id}: ${val}`);
+    });
+
+    lines.push(`Sell Chest: ${sellChestLabel} (${sellChestValue}x)`);
+    lines.push('');
+    lines.push('--- Income ---');
+    lines.push(`Per Minute: ${document.getElementById('Income1').textContent}`);
+    lines.push(`Per Hour: ${document.getElementById('Income2').textContent}`);
+    lines.push(`Per Day: ${document.getElementById('Income3').textContent}`);
+    lines.push(`Per Week: ${document.getElementById('Income4').textContent}`);
+    lines.push(`Per Month: ${document.getElementById('Income5').textContent}`);
+    lines.push('');
+    lines.push('--- Statistics ---');
+    lines.push(`Total Generators: ${document.getElementById('totalGens').textContent}`);
+    lines.push(`Most Valuable: ${document.getElementById('Most Profitable').textContent}`);
+    lines.push(`Efficiency: ${document.getElementById('efficiency').textContent}`);
+    lines.push(`Average per Generator: ${document.getElementById('avgPerGen').textContent}`);
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `GenCalculator-results-${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function savePreset() {
     const preset = {
         multiplier: document.getElementById('Multiplier').value
     };
@@ -679,16 +668,12 @@ function loadPreset() {
     input.click();
 }
 
-        // Auto-calculate on input change
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('input, select');
-            inputs.forEach(input => {
-                input.addEventListener('input', GenCalc);
-            });
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        input.addEventListener('input', GenCalc);
+    });
+});
 
-        // Initial calculation
-        GenCalc();
-    </script>
-</body>
-</html>
+GenCalc();
+</script>
