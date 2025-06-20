@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Target Planner</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #3a0ca3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      color: white;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+    }
+
+    select option {
+      background-color: #1a1a2e;
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 1rem;
+      background: linear-gradient(to right, #7a5cff, #5f31c2);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .output {
+      margin-top: 24px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      background: rgba(255,255,255,0.05);
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+
+    .checkbox-group {
+      columns: 2;
+      margin-top: 20px;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      transform: scale(1.2);
+      accent-color: #4ecdc4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Target Generator Planner</h1>
+    <div class="form-group">
+      <label for="targetValue">Target Income</label>
+      <input type="number" id="targetValue" min="1" step="any" />
+    </div>
+    <div class="form-group">
+      <label for="targetUnit">Time Frame</label>
+      <select id="targetUnit">
+        <option value="1">Per Minute</option>
+        <option value="60">Per Hour</option>
+        <option value="1440">Per Day</option>
+        <option value="10080">Per Week</option>
+        <option value="43200">Per Month</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="multiplier">Sell Chest</label>
+      <select id="multiplier">
+        <option value="1">1x - Base</option>
+        <option value="1.5">1.5x - Premium</option>
+        <option value="2">2x - VIP</option>
+        <option value="2.5">2.5x - Elite</option>
+        <option value="3">3x - Lava Chicken</option>
+        <option value="3.5">3.5x - Ghast</option>
+      </select>
+    </div>
+    <div class="form-group checkbox-group" id="generatorChecks"></div>
+    <button onclick="calculatePlan()">Calculate Plan</button>
+    <button onclick="downloadPlan()">Download Plan</button>
+    <div class="output" id="result"></div>
+    <div class="footer">Made by Hitzlikedna & AlphaT51</div>
+  </div>
+
+  <script>
+    const rates = {
+      Ghast: 125,
+      Resin: 100,
+      Sculk: 75,
+      Amethyst: 58,
+      Cr_Obsidian: 45,
+      Obsidian: 35,
+      Netherite: 28,
+      Diamond: 20,
+      Gold: 15,
+      Redstone: 10,
+      Copper: 10,
+      Iron: 6,
+      Coal: 4,
+      Prismarine: 3.5,
+      Kelp: 2.5,
+      Pumpkin: 2,
+      Melon: 1.5,
+      Wheat: 0.5
+    };
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("generatorChecks");
+      for (const gen in rates) {
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = gen;
+        checkbox.checked = true;
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(gen));
+        container.appendChild(label);
+      }
+    });
+
+    function calculatePlan() {
+      const value = parseFloat(document.getElementById("targetValue").value);
+      const unit = parseFloat(document.getElementById("targetUnit").value);
+      const multiplier = parseFloat(document.getElementById("multiplier").value);
+      if (!value || !unit || !multiplier) return;
+
+      const allowed = Array.from(document.querySelectorAll("#generatorChecks input:checked"))
+        .map(cb => cb.value);
+
+      const incomePerMin = value / unit;
+      const gens = {};
+      const sorted = Object.entries(rates)
+        .filter(([gen]) => allowed.includes(gen))
+        .sort((a, b) => b[1] - a[1]);
+
+      let remaining = incomePerMin;
+      for (const [gen, rate] of sorted) {
+        const incomePerGen = rate * 4 * multiplier;
+        const count = Math.floor(remaining / incomePerGen);
+        if (count > 0) {
+          gens[gen] = count;
+          remaining -= count * incomePerGen;
+        }
+      }
+
+      let output = "Recommended Generators:\n";
+      for (const [gen, count] of Object.entries(gens)) {
+        output += `${gen}: ${count}\n`;
+      }
+      document.getElementById("result").textContent = output;
+      window.currentPlanText = output;
+    }
+
+    function downloadPlan() {
+      const text = window.currentPlanText || "";
+      const blob = new Blob([text], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `genplan-${new Date().toISOString().split("T")[0]}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
