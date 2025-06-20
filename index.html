@@ -587,23 +587,38 @@
         }
 
         function exportResults() {
-            const results = {
-                timestamp: new Date().toISOString(),
-                configuration: {},
-                results: {
-                    perMinute: document.getElementById('Income1').textContent,
-                    perHour: document.getElementById('Income2').textContent,
-                    perDay: document.getElementById('Income3').textContent,
-                    perWeek: document.getElementById('Income4').textContent,
-                    perMonth: document.getElementById('Income5').textContent
-                },
-                statistics: {
-                    totalGenerators: document.getElementById('totalGens').textContent,
-                    mostValuable: document.querySelector('[id="Most Profitable"]').textContent,
-                    efficiency: document.getElementById('efficiency').textContent,
-                    avgPerGen: document.getElementById('avgPerGen').textContent
-                }
-            };
+    const inputs = document.querySelectorAll('input[type="number"]');
+    let txtContent = `GenCalculator Export - ${new Date().toLocaleString()}\n\nConfiguration:\n`;
+
+    inputs.forEach(input => {
+        if (input.value) {
+            txtContent += `- ${input.id}: ${input.value}\n`;
+        }
+    });
+
+    txtContent += `- Multiplier: ${document.getElementById('Multiplier').value}\n\n`;
+
+    txtContent += `Results:\n`;
+    txtContent += `- Per Minute: ${document.getElementById('Income1').textContent}\n`;
+    txtContent += `- Per Hour: ${document.getElementById('Income2').textContent}\n`;
+    txtContent += `- Per Day: ${document.getElementById('Income3').textContent}\n`;
+    txtContent += `- Per Week: ${document.getElementById('Income4').textContent}\n`;
+    txtContent += `- Per Month: ${document.getElementById('Income5').textContent}\n\n`;
+
+    txtContent += `Statistics:\n`;
+    txtContent += `- Total Generators: ${document.getElementById('totalGens').textContent}\n`;
+    txtContent += `- Most Valuable: ${document.querySelector('[id="Most Profitable"]').textContent}\n`;
+    txtContent += `- Efficiency: ${document.getElementById('efficiency').textContent}\n`;
+    txtContent += `- Avg per Generator: ${document.getElementById('avgPerGen').textContent}\n`;
+
+    const blob = new Blob([txtContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `GenCalculator-results-${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
             
             // Get current configuration
             const inputs = document.querySelectorAll('input[type="number"]');
