@@ -480,11 +480,6 @@
         <div class="footer">
             <p>Made by Hitzlikedna & AlphaT51</p>
         </div>
-         <div style="margin-top: 40px; text-align: center;">
-            <a href="HowManyGens.html">
-                <button class="calculate-btn" style="max-width: 300px;">HowManyGensDoiNeed</button>
-            </a>
-        </div>
     </div>
 
 <script>
@@ -587,41 +582,48 @@ function clearAll() {
 }
 
 function exportResults() {
-    const results = {
-        timestamp: new Date().toISOString(),
-        configuration: {},
-        results: {
-            perMinute: document.getElementById('Income1').textContent,
-            perHour: document.getElementById('Income2').textContent,
-            perDay: document.getElementById('Income3').textContent,
-            perWeek: document.getElementById('Income4').textContent,
-            perMonth: document.getElementById('Income5').textContent
-        },
-        statistics: {
-            totalGenerators: document.getElementById('totalGens').textContent,
-            mostValuable: document.getElementById('Most Profitable').textContent,
-            efficiency: document.getElementById('efficiency').textContent,
-            avgPerGen: document.getElementById('avgPerGen').textContent
-        }
-    };
+    const configLines = [];
+    const resultLines = [];
+    const statsLines = [];
 
     const inputs = document.querySelectorAll('input[type="number"]');
     inputs.forEach(input => {
         if (input.value) {
-            results.configuration[input.id] = input.value;
+            configLines.push(`${input.id}: ${input.value}`);
         }
     });
-    results.configuration.sellChest = {
-        value: document.getElementById('Multiplier').value,
-        label: document.getElementById('Multiplier').selectedOptions[0].text
-    };
 
-    const resultData = JSON.stringify(results, null, 2);
-    const blob = new Blob([resultData], { type: 'application/json' });
+    const multiplierEl = document.getElementById('Multiplier');
+    configLines.push(`Sell Chest Multiplier: ${multiplierEl.value} (${multiplierEl.selectedOptions[0].text})`);
+
+    resultLines.push("Income Results:");
+    resultLines.push(`Per Minute: ${document.getElementById('Income1').textContent}`);
+    resultLines.push(`Per Hour: ${document.getElementById('Income2').textContent}`);
+    resultLines.push(`Per Day: ${document.getElementById('Income3').textContent}`);
+    resultLines.push(`Per Week: ${document.getElementById('Income4').textContent}`);
+    resultLines.push(`Per Month: ${document.getElementById('Income5').textContent}`);
+
+    statsLines.push("Statistics:");
+    statsLines.push(`Total Generators: ${document.getElementById('totalGens').textContent}`);
+    statsLines.push(`Most Valuable: ${document.getElementById('Most Profitable').textContent}`);
+    statsLines.push(`Efficiency: ${document.getElementById('efficiency').textContent}`);
+    statsLines.push(`Avg per Generator: ${document.getElementById('avgPerGen').textContent}`);
+
+    const txtData = [
+        `Timestamp: ${new Date().toLocaleString()}`,
+        "\n--- Configuration ---",
+        ...configLines,
+        "\n--- Results ---",
+        ...resultLines,
+        "\n--- Statistics ---",
+        ...statsLines
+    ].join('\n');
+
+    const blob = new Blob([txtData], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `GenCalculator-results-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `GenCalculator-results-${new Date().toISOString().split('T')[0]}.txt`;
     a.click();
     URL.revokeObjectURL(url);
 }
@@ -662,12 +664,9 @@ function loadPreset() {
                             element.value = preset[key];
                         }
                     });
-
-                    // Use direct assignment for multiplier
                     if (preset.sellChest && preset.sellChest.value !== undefined) {
                         document.getElementById('Multiplier').value = preset.sellChest.value.toString();
                     }
-
                     GenCalc();
                 } catch (error) {
                     alert('Invalid preset file');
