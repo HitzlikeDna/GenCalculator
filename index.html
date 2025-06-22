@@ -337,6 +337,10 @@
 
                 <form onsubmit="event.preventDefault(); GenCalc();">
                     <div class="form-grid">
+                        <div class="form-group" style="grid-column: 1 / -1; justify-self: center;">
+                            <label for="Wither_Rose">Wither Rose</label>
+                            <input type="number" id="Wither_Rose" min="0" step="1">
+                        </div>
                         <div class="form-group">
                             <label for="Ghast">Ghast</label>
                             <input type="number" id="Ghast" min="0" step="1">
@@ -499,13 +503,13 @@ function formatNumber(num) {
 }
 
 function GenCalc() {
-    const ids = [
-        "Ghast", "Resin", "Sculk", "Amethyst", "Cr_Obsidian", "Obsidian", "Netherite",
-        "Diamond", "Gold", "Redstone", "Copper", "Iron", "Coal", "Prismarine",
-        "Kelp", "Pumpkin", "Melon", "Wheat"
-    ];
+      const ids = [
+        "Wither_Rose", "Ghast", "Resin", "Sculk", "Amethyst", "Cr_Obsidian", "Obsidian", "Netherite",
+        "Diamond", "Gold", "Redstone", "Copper", "Iron", "Coal", "Prismarine", "Kelp", "Pumpkin", "Melon", "Wheat"
+      ];
 
     const rates = {
+        Wither_Rose: 1500,
         Ghast: 125,
         Resin: 100,
         Sculk: 75,
@@ -524,7 +528,7 @@ function GenCalc() {
         Pumpkin: 2,
         Melon: 1.5,
         Wheat: 0.5
-    };
+      };
 
     const values = {};
     let totalGenerators = 0;
